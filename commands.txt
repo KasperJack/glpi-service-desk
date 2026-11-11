@@ -1,0 +1,25 @@
+start the docker container
+- docker compose up -d
+
+
+
+
+export db
+- docker exec -i glpi_db mysqldump -u root -psecretpassword glpi > glpi_db_backup.sql
+- docker cp glpi_app:/var/www/glpi/config C:\glpi-test\config
+- docker cp glpi_app:/var/www/glpi/files C:\glpi-test\files
+
+
+
+import db
+
+- docker exec -i glpi_db mysql -u root -psecretpassword glpi < glpi_db_backup.sql
+- docker cp C:\glpi-test\config glpi_app:/var/www/glpi/
+- docker cp C:\glpi-test\files glpi_app:/var/www/glpi/
+
+
+
+
+Verification: Fix container file permissions by running:
+
+docker exec -it glpi_app chown -R www-data:www-data /var/www/glpi/config /var/www/glpi/files
